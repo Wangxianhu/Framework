@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+
+	<!-- POST提交乱码问题 -->
+	<filter>
+		<filter-name>encoding</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>encoding</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+  <!-- 配置springMvc前端控制器 -->
+  <servlet>
+  	<servlet-name>wxh</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  	<!-- 如果没有指定springMvc核心配置文件的位置, 那么默认会去/WEB-INF/springMvc0903-servlet.xml路径找 -->
+	<init-param>
+  		<param-name>contextConfigLocation</param-name>
+  		<param-value>classpath:springmvc.xml</param-value>
+	</init-param>
+  	<!-- tomcat启动就加载 -->
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>wxh</servlet-name>
+  	<!-- 
+  		配置dispatcherServlet 拦截的请求的路径
+  		/* 拦截所有路径, 都会进入dispatcherServlet中但是不放行, 所以不能使用, springMvc不支持
+  		*.action 拦截url路径以.action结尾的, 这样的路径才能进入DispatcherServlet
+  		/ 拦截所有路径, 但是不包括.jsp的, 但是js, css, png, jpg等资源都会被拦截不被放行
+  	 -->
+  	<url-pattern>/</url-pattern>
+  </servlet-mapping>
+  	<!-- 设置默认报错页 -->
+  	<error-page>
+	    <error-code>404</error-code>
+	    <location>/WEB-INF/error/404.jsp</location>
+	</error-page>
+	<error-page>
+	    <error-code>500</error-code>
+	    <location>/WEB-INF/error/500.jsp</location>
+	</error-page>
+</web-app>
